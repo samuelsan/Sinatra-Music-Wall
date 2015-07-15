@@ -2,7 +2,7 @@
 @login_error = false
 
 get '/' do
-  erb :index
+  erb :'users/index'
 end
 
 get '/songs' do
@@ -33,6 +33,17 @@ post '/songs' do
   end
 end
 
+post '/votes' do
+  @vote = Vote.new(
+    song_id: params[:song_id],
+    user_id: request.cookies['user_id']
+  )
+  if @vote.save
+    redirect '/song'
+  else
+    "you already voted"
+  end
+end
 
 get '/signup' do
   @user = User.new
@@ -61,16 +72,13 @@ post '/login' do
   #binding.pry
   if log_user = User.find_by(email: params[:email], password: params[:password])
      session[:current_user_id] = log_user.id
-
     @login_error = false
     redirect to('/songs')
   else
      @login_error = true
      erb :'users/index'
-    end 
+  end 
 end
-
-
  
 get '/logout' do
   session.clear

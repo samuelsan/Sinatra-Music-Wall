@@ -4,7 +4,5 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { maximum: 40 }
   has_many :songs
   has_many :votes
-  has_many :reviews
 
 end
-
